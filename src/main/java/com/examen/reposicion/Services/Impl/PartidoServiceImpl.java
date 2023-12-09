@@ -39,50 +39,24 @@ public class PartidoServiceImpl implements PartidoService{
                 if(i>equipos.size()){
                     i = 0;
                 };
+                return emparejarEquipos(equipos.get(i), equipos.get(i+1));
             }
 
-            
         }
-
-        return "Partidos finalizados. Ver tabla de resultados";
     }
 
     public String emparejarEquipos(Equipo equipo1, Equipo equipo2){
-        Posicion posicionEquipo1 = this.posicionRepository.findById(equipo1.getCodigoEquipo()).get();
-        Posicion posicionEquipo2 = this.posicionRepository.findById(equipo2.getCodigoEquipo()).get();
-
-
-
-        if (posicionEquipo2 == null) {
-            posicionEquipo2 = new Posicion();
-        }
-
+        Posicion posicionEquipo1 = new Posicion();
+        Posicion posicionEquipo2 = new Posicion();
         Random random = new Random();
 
         int golesEquipo1 = random.nextInt(10);
         int golesEquipo2 = random.nextInt(10);
         for(int i=0; i<2;i++){
             if(golesEquipo1 > golesEquipo2){
-                if(posicionEquipo1 == null){
-                    posicionEquipo1 = new Posicion();
-                    posicionEquipo1.setCodigoEquipo(equipo1.getCodigoEquipo());
-                    posicionEquipo1.setEmpates(0);
-                    posicionEquipo1.setGanados(1);
-                    posicionEquipo1.setPerdidos(1);
-                    posicionEquipo1.setGolesFavor(golesEquipo1);
-                    posicionEquipo1.setGolesContra(golesEquipo2);
-                    posicionEquipo1.setPuntos(3);
-                }else{
-                    posicionEquipo1.setGanados(posicionEquipo1.getGanados()+1);
-                    posicionEquipo1.setGolesFavor(posicionEquipo1.getGolesFavor()+golesEquipo1);
-                    posicionEquipo2.setGolesContra(posicionEquipo1.getGolesContra()+golesEquipo2);
-                    posicionEquipo2.setPuntos(posicionEquipo1.getPuntos()+3);
-                }
-                
                 posicionEquipo1.setGanados(posicionEquipo1.getGanados()+1);
                 posicionEquipo1.setGolesFavor(golesEquipo1);
                 posicionEquipo1.setPuntos(posicionEquipo1.getPuntos()+3);
-                
                 this.posicionRepository.save(posicionEquipo1);
                 return equipo1.getNombre() + "ha ganado.";
             }else if(golesEquipo2 > golesEquipo1){
